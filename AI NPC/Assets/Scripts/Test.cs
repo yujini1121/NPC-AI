@@ -14,7 +14,7 @@ public class Test : MonoBehaviour
                 UnityEngine.Debug.Log("Try");
 
                 Process psi = new Process();
-                psi.StartInfo.FileName = "C:/Users/User/pythonProject/dist/main/main.exe";
+                psi.StartInfo.FileName = "C:/Users/User/pythonProject/dist/main.exe";
                 psi.StartInfo.Arguments = "C:/Users/User/pythonProject/main.py";
                 psi.StartInfo.CreateNoWindow = true;
                 psi.StartInfo.UseShellExecute = false;
