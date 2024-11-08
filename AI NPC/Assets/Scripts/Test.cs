@@ -11,11 +11,22 @@ public class Test : MonoBehaviour
         {
             try
             {
-                UnityEngine.Debug.Log("Try");
+                UnityEngine.Debug.Log("R key pressed. Executing Python script...");
+
+                // 파이썬 실행 준비
+                string pythonPath = @"C:\Users\User\AppData\Local\Microsoft\WindowsApps\python.exe";  // 시스템에 설치된 Python 경로
+                string scriptPath = @"C:\Users\User\Desktop\test\AI-NPC\Please\main.py";  // 실행할 스크립트 경로
 
                 Process psi = new Process();
-                psi.StartInfo.FileName = "C:/Users/User/pythonProject/dist/main.exe";
-                psi.StartInfo.Arguments = "C:/Users/User/pythonProject/main.py";
+                psi.StartInfo.FileName = @"C:\Users\User\AppData\Local\Microsoft\WindowsApps\python.exe";
+                psi.StartInfo.Arguments = @"C:\Users\User\Desktop\test\AI-NPC\Please\main.py";
+                //psi.StartInfo.FileName = "C:/Users/User/Desktop/test/AI-NPC/Please/dist/main.exe";
+
+
+                // 유니티에서 받은 입력값을 인자로 전달
+                string userInput = "test_input";  
+                psi.StartInfo.Arguments = psi.StartInfo.Arguments = $"\"{pythonPath}\"";
+
                 psi.StartInfo.CreateNoWindow = true;
                 psi.StartInfo.UseShellExecute = false;
                 psi.StartInfo.RedirectStandardOutput = true;
@@ -28,11 +39,7 @@ public class Test : MonoBehaviour
                 {
                     if (!string.IsNullOrEmpty(e.Data))
                     {
-                        // 시스템 메시지 필터링
-                        if (!e.Data.Contains("�ƹ� Ű�� �����ʽÿ�")) // 특정 문자열 필터링
-                        {
-                            UnityEngine.Debug.Log("Output: " + e.Data);
-                        }
+                        UnityEngine.Debug.Log("Output from Python: " + e.Data);
                     }
                 };
 
@@ -40,26 +47,25 @@ public class Test : MonoBehaviour
                 {
                     if (!string.IsNullOrEmpty(e.Data))
                     {
-                        UnityEngine.Debug.LogError("Error: " + e.Data);
+                        UnityEngine.Debug.LogError("Error from Python: " + e.Data);
                     }
                 };
 
-                psi.Start(); // 프로세스 시작
-                psi.BeginOutputReadLine(); // 비동기 읽기 시작
+                psi.Start();
+                psi.BeginOutputReadLine();
                 psi.BeginErrorReadLine();
 
                 // 종료 이벤트 처리
                 psi.EnableRaisingEvents = true;
                 psi.Exited += (sender, e) =>
                 {
-                    UnityEngine.Debug.Log("Process exited with code: " + psi.ExitCode);
-                    psi.Dispose(); // 종료 후 프로세스 자원 해제
+                    UnityEngine.Debug.Log("Python process exited with code: " + psi.ExitCode);
+                    psi.Dispose();
                 };
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log("Catch");
-                UnityEngine.Debug.LogError("Unable to launch app: " + e.Message);
+                UnityEngine.Debug.LogError("Unable to launch Python script: " + e.Message);
             }
         }
     }

@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using UnityEngine;
 
-public class AdobePlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     private float keyHorizontalAxisValue;
     private float keyVerticalAxisValue;
