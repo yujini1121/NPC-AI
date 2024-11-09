@@ -5,7 +5,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using System.Text;
 
-public class NPCInteraction : MonoBehaviour
+public class Please : MonoBehaviour
 {
     public TMP_InputField userInputField;
     public TextMeshProUGUI npcResponseText;
