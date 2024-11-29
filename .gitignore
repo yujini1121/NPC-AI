@@ -63,3 +63,6 @@ At the end of Chaos/UserSettings/EditorUserSettings.asset
 At the end of Chaos/UserSettings/Layouts/default-2021.dwlt
 At the end of Chaos/UserSettings/Layouts/default-2021.dwlt
 At the end of Chaos/UserSettings/EditorUserSettings.asset
+
+# There's no reason to hack an API key that only has $5 in it.
+*.env

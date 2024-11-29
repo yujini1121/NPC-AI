@@ -13,11 +13,8 @@ public class PythonCallerTest : MonoBehaviour
     private System.IO.StreamReader pythonOutput;
     private System.Threading.CancellationTokenSource cancellationTokenSource;
 
-
-
     public static string GetPath(string fileName)
         => $"Assets/PythonFiles/{fileName}.py";
-
 
     // Start is called before the first frame update
     void Start()
@@ -58,8 +55,9 @@ public class PythonCallerTest : MonoBehaviour
             StartInfo = new System.Diagnostics.ProcessStartInfo()
             {
                 FileName = "python", // 이건 무슨 프로그램이냐?
-                Arguments = GetPath("PythonAsyncTest"), // 파이썬 파일 이름
+                Arguments = GetPath("PythonLlmTest"), // 파이썬 파일 이름
                 UseShellExecute = false,
+                //UseShellExecute = true,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -128,5 +126,4 @@ public class PythonCallerTest : MonoBehaviour
 
         Debug.Log("Python process has been terminated.");
     }
-
 }
