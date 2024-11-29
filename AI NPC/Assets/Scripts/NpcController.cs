@@ -16,6 +16,7 @@ public class NpcController : MonoBehaviour
     private System.IO.StreamWriter pythonInput;
     private System.IO.StreamReader pythonOutput;
     private System.Threading.CancellationTokenSource cancellationTokenSource;
+    private SynchronizationContext unityContext;
     [SerializeField] private TMP_InputField userInputField;
     [SerializeField] private TextMeshProUGUI npcResponseText;
     [SerializeField] private bool isDebugging = true;
@@ -28,11 +29,16 @@ public class NpcController : MonoBehaviour
         string userInput = userInputField.text;
         SendInputToPython(userInput);
     }
+    private void Awake()
+    {
+        npcResponseText.text = "Halo";
 
+    }
     // Start is called before the first frame update
     void Start()
     {
         StartPythonProcess();
+        unityContext = SynchronizationContext.Current;
     }
 
     // Update is called once per frame
@@ -102,12 +108,18 @@ public class NpcController : MonoBehaviour
                 if (!string.IsNullOrEmpty(line))
                 {
                     Debug.Log($"Python Output: {line}");
-
-                    npcResponseText.text = line;
+                    
+                    unityContext.Post(_ => {
+                        npcResponseText.text = line;
+                    }, null);
                 }
             }
-            catch
+            catch (System.Exception ex)
             {
+                Debug.Log($"<!>NpcController.M_ReadPythonOutputAsync() : 예외 발생! {ex.Message}");
+                Debug.Log($"<!>NpcController.M_ReadPythonOutputAsync() : 예외 스텍 트레이스 : {ex.StackTrace}입니다.");
+                Debug.Log($"<!>NpcController.M_ReadPythonOutputAsync() : 예외 소스 : {ex.Source}에 발생함!");
+
                 break;
             }
         }

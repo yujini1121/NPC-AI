@@ -10,10 +10,18 @@ from langchain_community.llms import OpenAI
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 
+print(f"Python : ===START===", flush=True)
+print(f"Python : Hello!", flush=True)
 load_dotenv('key.env')
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+print(f"Python : env received", flush=True)
 
-llm = ChatOpenAI(model="gpt-4o-mini")
+envkey = os.getenv("OPENAI_API_KEY")
+print(f"Python : setted Key", flush=True)
+
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    api_key=envkey
+    )
 template = PromptTemplate.from_template("""
 You are given an input string from a user: {user_input}
 Your task is to interpret the user's intention based on the input and describe the user's intention as a clear sentence.
