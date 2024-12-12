@@ -71,10 +71,10 @@ array_text_function_descriptions_en = [
     "This method is for follow player"
 ]
 array_text_function_descriptions_ko = [
-    "이 함수는 NPC가 평화로운 상태일 때 호출합니다.",
-    "이 함수는 NPC가 플레이어와 거래를 할 때 호출합니다.",
-    "이 함수는 NPC가 플레이어를 공격하려고 할때 호출합니다.",
-    "이 함수는 NPC가 플레이어를 따라다니려고 할 때 호출합니다."
+    "현재 상황은 당신이 평화로운 상태입니다.",
+    "현재 상황은 당신이 플레이어와 거래를 하려고 합니다.",
+    "현재 상황은 당신이 플레이어를 공격하려고 합니다.",
+    "현재 상황은 당신이 플레이어를 따라다니려고 합니다. 플레이어가 당신과 동행하는것을 요청했을때 실행합니다."
 ]
 array_embedding_function_descriptions = [None] * len(array_text_function_descriptions_ko)
 

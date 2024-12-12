@@ -29,6 +29,9 @@ public class NpcController : MonoBehaviour
     public static string GetPath(string fileName)
         => $"Assets/PythonFiles/{fileName}.py";
 
+    AIController aiController;
+
+
     public void OnSubmitButtonClicked()
     {
         string userInput = userInputField.text;
@@ -43,6 +46,8 @@ public class NpcController : MonoBehaviour
     {
         StartPythonProcess();
         unityContext = SynchronizationContext.Current;
+
+        aiController = GetComponent<AIController>();
     }
 
     // Update is called once per frame
@@ -279,15 +284,19 @@ public class NpcController : MonoBehaviour
         switch (functionNumner)
         {
             case 0:
+                if (aiController != null) aiController.StayIdle();
                 Debug.Log("0번 실행");
                 break;
             case 1:
+                if (aiController != null) aiController.StartTrade();
                 Debug.Log("1번 실행");
                 break;
             case 2:
+                if (aiController != null) aiController.StartAttackPlayer();
                 Debug.Log("2번 실행");
                 break;
             case 3:
+                if (aiController != null) aiController.StartFollowPlayer();
                 Debug.Log("3번 실행");
                 break;
             default:
