@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94fd2454815853b46a12744a61241e56, type: 3}
   m_Name: Knife
   m_EditorClassIdentifier: 
-  mItemID: 3
   mItemName: "\uCE7C"
   mItemImage: {fileID: 21300000, guid: e57eb6cf35072d34b8b124374e3368c7, type: 3}
-  mItemPrice: 4600
+  mItemPrice: 3600

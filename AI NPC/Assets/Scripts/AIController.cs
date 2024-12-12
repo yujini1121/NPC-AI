@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class AIController : MonoBehaviour
 {
@@ -19,7 +20,6 @@ public class AIController : MonoBehaviour
     [SerializeField] private GameObject tradePanel;
 
     [Header("Follow")]
-    [SerializeField] private bool isFollowing;
     [SerializeField] private float followSpeed;
     [SerializeField] private float stoppingDistance; // 플레이어와 유지할 최소 거리
 
@@ -47,7 +47,6 @@ public class AIController : MonoBehaviour
     // 0 : 평화로운 상태
     public void StayIdle()
     {
-        isFollowing = false;
 
         OpenChatUI();
         CloseTradeUI();
@@ -65,6 +64,8 @@ public class AIController : MonoBehaviour
     {
         CloseChatUI();
         CloseTradeUI();
+
+
     }
 
     // 3 : 플레이어를 따라가는 상태
@@ -73,9 +74,6 @@ public class AIController : MonoBehaviour
         CloseChatUI();
         CloseTradeUI();
 
-        isFollowing = true;
-
-        if (!isFollowing) return;
 
         float distance = Vector3.Distance(transform.position, player.position);
 
@@ -89,7 +87,6 @@ public class AIController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, followSpeed * Time.deltaTime);
         }
     }
-
 
     #region Open / Close UI
     void OpenChatUI()
