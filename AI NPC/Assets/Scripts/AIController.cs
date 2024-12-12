@@ -23,6 +23,13 @@ public class AIController : MonoBehaviour
     [SerializeField] private float followSpeed;
     [SerializeField] private float stoppingDistance; // 플레이어와 유지할 최소 거리
 
+    [Header("Attack")]
+    [SerializeField] private GameObject stonePrefab;
+    [SerializeField] private Transform throwPoint;
+    [SerializeField] private float throwForce = 10f;
+    [SerializeField] private float attackInterval = 3f; // 공격 간격 (초)
+    private float lastAttackTime = 0f; // 마지막 공격 시간
+
 
     private void FixedUpdate()
     {
@@ -40,6 +47,9 @@ public class AIController : MonoBehaviour
             case 3:
                 FollowPlayer();
                 break;
+            default:
+                Debug.LogError("IndexOutOfRange: inputNumber를 0~3으로 맞춰주세요.");
+                break;
         }    
     }
 
@@ -47,31 +57,42 @@ public class AIController : MonoBehaviour
     // 0 : 평화로운 상태
     public void StayIdle()
     {
-
-        OpenChatUI();
         CloseTradeUI();
     }
 
     // 1 : 플레이어와 거래하는 상태
     public void StartTrade()
     {
-        CloseChatUI();
         OpenTradeUI();
     }
 
     // 2 : 플레이어를 공격하는 상태
     public void AttackPlayer()
     {
-        CloseChatUI();
         CloseTradeUI();
 
+        if (Time.time < lastAttackTime + attackInterval) return;    // 공격 간격 체크
+        lastAttackTime = Time.time;                                 // 마지막 공격 시간 갱신
 
+        if (player == null || stonePrefab == null || throwPoint == null)
+        {
+            Debug.LogWarning("AttackPlayer() 호출 실패");
+            return;
+        }
+
+        GameObject rock = Instantiate(stonePrefab, throwPoint.position, Quaternion.identity);
+        Vector3 direction = (player.position - throwPoint.position).normalized;
+
+        Rigidbody rockRb = rock.GetComponent<Rigidbody>();
+        if (rockRb != null)
+        {
+            rockRb.AddForce(direction * throwForce, ForceMode.Impulse);
+        }
     }
 
     // 3 : 플레이어를 따라가는 상태
     public void FollowPlayer()
     {
-        CloseChatUI();
         CloseTradeUI();
 
 
@@ -88,19 +109,8 @@ public class AIController : MonoBehaviour
         }
     }
 
+
     #region Open / Close UI
-    void OpenChatUI()
-    {
-        playerInputField.gameObject.SetActive(true);
-        goblinInputField.gameObject.SetActive(true);
-    }
-
-    void CloseChatUI()
-    {
-        playerInputField.gameObject.SetActive(false);
-        goblinInputField.gameObject.SetActive(false);
-    }
-
     void OpenTradeUI()
     {
         tradePanel.SetActive(true);
