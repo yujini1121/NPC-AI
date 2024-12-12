@@ -15,3 +15,4 @@ MonoBehaviour:
   mItemID: 1
   mItemName: "\uB3C4\uB07C"
   mItemImage: {fileID: 21300000, guid: d894dac98927d1647a626fc0d29c45d5, type: 3}
+  mItemPrice: 4000

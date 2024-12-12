@@ -35,4 +35,14 @@ public class ItemAttribute : ScriptableObject
             return mItemImage;
         }
     }
+
+    [Header("Price")]
+    [SerializeField] private int mItemPrice;
+    public int ItemPrice
+    {
+        get
+        {
+            return mItemPrice;
+        }
+    }
 }
