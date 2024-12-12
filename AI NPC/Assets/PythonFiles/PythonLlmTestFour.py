@@ -72,8 +72,8 @@ array_text_function_descriptions_en = [
 ]
 array_text_function_descriptions_ko = [
     "현재 상황은 당신이 평화로운 상태입니다.",
-    "현재 상황은 당신이 플레이어와 거래를 하려고 합니다.",
-    "현재 상황은 당신이 플레이어를 공격하려고 합니다.",
+    "현재 상황은 당신이 플레이어와 거래를 하려고 합니다. 전투적이지 않은 상황입니다.",
+    "현재 상황은 당신이 플레이어를 공격하려고 합니다. 당신은 공격적인 플레이어를 만났으며, 당신은 스스로를 보호하고자 합니다. 당신은 플레이어와 전투할 때, 당신이 승리할 가능성이 높다고 판단합니다. ",
     "현재 상황은 당신이 플레이어를 따라다니려고 합니다. 플레이어가 당신과 동행하는것을 요청했을때 실행합니다."
 ]
 array_embedding_function_descriptions = [None] * len(array_text_function_descriptions_ko)
