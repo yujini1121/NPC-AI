@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
@@ -9,6 +10,9 @@ using static Please;
 public class NpcController : MonoBehaviour
 {
     public const bool I_HAVE_PYTHON_EXE = true;
+    private static StringBuilder sharedStringBuilder = new StringBuilder();
+    private static bool startReceive = false;
+    private static readonly object lockObjectAnswer = new object();
     // 파이썬 코드가 리턴하는 값 : "함수번호 / 출력 문자열"
     [SerializeField] private int milisecondForProcessExit = 3000;
     private bool isExited;
@@ -17,6 +21,7 @@ public class NpcController : MonoBehaviour
     private System.IO.StreamReader pythonOutput;
     private System.Threading.CancellationTokenSource cancellationTokenSource;
     private SynchronizationContext unityContext;
+    
     [SerializeField] private TMP_InputField userInputField;
     [SerializeField] private TextMeshProUGUI npcResponseText;
     [SerializeField] private bool isDebugging = true;
@@ -32,7 +37,6 @@ public class NpcController : MonoBehaviour
     private void Awake()
     {
         npcResponseText.text = "Halo";
-
     }
     // Start is called before the first frame update
     void Start()
@@ -44,10 +48,10 @@ public class NpcController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SendInputToPython("Sup merchant, anything you have to sell?"); // 예시 입력
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    SendInputToPython("Sup merchant, anything you have to sell?"); // 예시 입력
+        //}
 
         if (Input.GetKeyDown(KeyCode.F))
         {
@@ -80,19 +84,24 @@ public class NpcController : MonoBehaviour
             StartInfo = new System.Diagnostics.ProcessStartInfo()
             {
                 FileName = "python", // 이건 무슨 프로그램이냐?
-                Arguments = GetPath("PythonLlmTestThree"), // 파이썬 파일 이름
+                Arguments = GetPath("PythonLlmTestFour"), // 파이썬 파일 이름
                 //WorkingDirectory = "Assets/PythonFiles",
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                CreateNoWindow = true
+                CreateNoWindow = true,
+                StandardOutputEncoding = Encoding.UTF8,
+                StandardInputEncoding = Encoding.UTF8
             }
         };
 
         pythonProcess.Start();
+        
         pythonInput = pythonProcess.StandardInput;
         pythonOutput = pythonProcess.StandardOutput;
+        Debug.Log($"기본 입력 및 출력 인코딩 {pythonInput.Encoding} {pythonOutput.CurrentEncoding}");
+
         cancellationTokenSource = new System.Threading.CancellationTokenSource();
         Task.Run(() => M_ReadPythonOutputAsync(cancellationTokenSource.Token));
     }
@@ -107,11 +116,43 @@ public class NpcController : MonoBehaviour
                 string line = await pythonOutput.ReadLineAsync();
                 if (!string.IsNullOrEmpty(line))
                 {
-                    Debug.Log($"Python Output: {line}");
+                    Debug.Log($"Python Output: 출력문: {line}");
+
+                    bool isEvent = line.StartsWith("EVENT: ");
+                    string parameter = line.Substring(7);
+                    if (isEvent && parameter == "receive start")
+                    {
+                        startReceive = true;
+                    }
+                    else if (isEvent && parameter == "receive end")
+                    {
+                        startReceive = false;
+                        Debug.Log($"문자열 끄집어내기 : {sharedStringBuilder.ToString()}");
+                        int m_functionNumber = int.Parse(sharedStringBuilder.ToString().Split('/')[0]);
+
+                        lock (lockObjectAnswer)
+                        {
+                            unityContext.Post(_ => {
+                                int m_index = sharedStringBuilder.ToString().IndexOf('/');
+
+                                npcResponseText.text = sharedStringBuilder.ToString().Substring(m_index + 1);
+                                AiAction(m_functionNumber);
+                                sharedStringBuilder.Clear();
+                            }, null);
+                        }
+                    }
                     
-                    unityContext.Post(_ => {
-                        npcResponseText.text = line;
-                    }, null);
+                    if (isEvent)
+                    {
+                        Debug.Log($"Python Output: 파라미터: {parameter}");
+                    }
+                    if (startReceive && parameter != "receive start")
+                    {
+                        lock (lockObjectAnswer)
+                        {
+                            sharedStringBuilder.Append($"{parameter}");
+                        }
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -231,5 +272,27 @@ public class NpcController : MonoBehaviour
             pythonProcess = null; // 나중에 가비지 콜렉터가 알아서 하겠지.
         }
         Debug.Log("Python process has been terminated.");
+    }
+
+    private void AiAction(int functionNumner)
+    {
+        switch (functionNumner)
+        {
+            case 0:
+                Debug.Log("0번 실행");
+                break;
+            case 1:
+                Debug.Log("1번 실행");
+                break;
+            case 2:
+                Debug.Log("2번 실행");
+                break;
+            case 3:
+                Debug.Log("3번 실행");
+                break;
+            default:
+                Debug.Log($"내가 모르는 함수야! functionNumner = {functionNumner}");
+                break;
+        }
     }
 }

@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 print(f"Python : ===START===", flush=True)
 print(f"Python : Hello!", flush=True)
+
 load_dotenv('key.env')
 print(f"Python : env received", flush=True)
 
