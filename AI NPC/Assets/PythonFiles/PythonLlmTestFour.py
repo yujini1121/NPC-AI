@@ -46,12 +46,12 @@ is_running_in_jupyter_notebook = False
 language_ko = 1
 language_en = 2
 language_using = language_ko
-model_name_gpt_4 = "gpt-4"
+model_name_gpt_4o = "gpt-4o"
 model_name_gpt_4o_mini = "gpt-4o-mini"
-model_name_text_embedding_3_small = "text-embedding-3-large" # 비영어권에서도 커버 가능합니다.
+model_name_text_embedding_3_large = "text-embedding-3-large" # 비영어권에서도 커버 가능합니다.
 model_name_text_embedding_3_small = "text-embedding-3-small" # 비영어권에는 불리할 수 있습니다. 다만 비용 측면에서 상당히 저렴해서 이걸 쓰고 있어요.
-model_name_current_llm = model_name_gpt_4o_mini
-model_name_current_embedding = model_name_text_embedding_3_small
+model_name_current_llm = model_name_gpt_4o
+model_name_current_embedding = model_name_text_embedding_3_large
 
 #### 2.2. OpenAI 및 랭체인 변수
 api_key = None
@@ -65,10 +65,10 @@ isFoundFiles = False;
 location_embadding_files = None
 # 각 출력 함수들을 설명하는 문자열입니다. 한글 혹은 영어 버전이 있습니다.
 array_text_function_descriptions_en = [
-    "this method is for peaceful action",
-    "this method is for trading with player",
-    "This method is for attacking player",
-    "This method is for follow player"
+    "The current situation is that you are peaceful",
+    "The current situation is that you are trying to trade with a player; it is a non-combative situation",
+    "The current situation is that you are about to attack a player. You have encountered an aggressive player, and you want to protect yourself. You believe that you have a good chance of winning if you engage the player in combat.",
+    "The current situation is that you are trying to follow the player. The player has requested that you accompany them."
 ]
 array_text_function_descriptions_ko = [
     "현재 상황은 당신이 평화로운 상태입니다.",
